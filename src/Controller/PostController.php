@@ -23,7 +23,7 @@ class PostController extends AbstractController
         $this->entityManager = $entityManager;
     }
     /**
-     * @Route("/post", name="post.list")
+     * @Route("/", name="post.list")
      */
     public function index()
     {
@@ -45,7 +45,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/post/add", name="post.add")
+     * @Route("profile/post/add", name="post.add")
      */
     public function add(Request $request)
     {
@@ -77,7 +77,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/post/edit/{id}", name="post.edit")
+     * @Route("profile/post/edit/{id}", name="post.edit")
      */
     public function edit(Request $request, Post $post)
     {
@@ -112,7 +112,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/post/delete/{id}", name = "post.delete", methods="DELETE")
+     * @Route("profile/post/delete/{id}", name = "post.delete", methods="DELETE")
      */
     public function delete(Post $post, Request $request)
     {
@@ -125,7 +125,7 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post.list');
     }
     /**
-     * @Route("/post/search", name = "post.search")
+     * @Route("/search", name = "post.search")
      */
     public function search(Request $request)
     {
@@ -139,7 +139,7 @@ class PostController extends AbstractController
         }
         return new Response(json_encode($result));
     }
-    public function getRealEntities($posts)
+    private function getRealEntities($posts)
     {
         foreach ($posts as $post) {
             $realEntities[$post->getId()] = [$post->getImage(), $post->getTitle()];
