@@ -54,7 +54,8 @@
 
     <header class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{path('post.list')}}"><img class="img-fluid" src="{{asset('images/logo.png')}}" alt="parsa"></a>
+            <a class="navbar-brand" href="{{path('post.list')}}"><img class="img-fluid"
+                    src="{{asset('images/logo.png')}}" alt="parsa"></a>
             <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navogation"
                 aria-controls="navogation" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -76,14 +77,18 @@
                         <a class="nav-link text-uppercase text-dark" href="contact.html">Contact</a>
                     </li>
                 </ul>
-                <form class="form-inline position-relative ml-lg-4">
-                    <input class="form-control px-0 w-100" type="search" placeholder="Search">
-                    <button class="search-icon" type="submit">
+                <form name="form" class="form-inline position-relative ml-lg-4">
+                    <input class="form-control px-0 w-100" id="search" type="search" placeholder="Search">
+                    <button class="search-icon">
                         <i class="ti-search text-dark"></i>
                     </button>
-                </form>
+                </form><br>
+
             </div>
+
         </nav>
+
+        <ul class="nav justify-content-center" id="entitiesNav"> </ul>
     </header>
 
 
@@ -106,7 +111,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-                        <a href="{{path('post.list')}}"><img src="{{asset('images/logo.png')}}" alt="persa" class="img-fluid"></a>
+                        <a href="{{path('post.list')}}"><img src="{{asset('images/logo.png')}}" alt="persa"
+                                class="img-fluid"></a>
                     </div>
                     <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
                         <ul class="list-unstyled">
@@ -176,6 +182,61 @@
 
     <!-- Main Script -->
     <script src="{{asset('js/script.js')}}"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            document.forms['form'].reset();
+            let searchRequest = null;
+            $("#search").keyup(function () {
+                let minlength = 1;
+                var that = this;
+                var value = $(this).val();
+                var entitySelector = $("#entitiesNav").html('');
+                if (value.length >= minlength) {
+                    if (searchRequest != null)
+                        searchRequest.abort();
+
+                    searchRequest = $.ajax({
+                        type: "GET",
+                        url: "{{ path('post.search') }}",
+                        data: {
+                            'data': value
+                        },
+                        dataType: "text",
+                        success: function (msg) {
+                            //we need to check if the value is the same
+                            if (value === $(that).val()) {
+                                var result = JSON.parse(msg);
+                                $.each(result, function (key, arr) {
+                                    $.each(arr, function (id, value) {
+                                        if (key === 'posts') {
+                                            if (id !== 'error') {
+                                                console.log(value[1]);
+                                                entitySelector.append(
+
+                                                    '<b>' + value[
+                                                        1] +
+                                                    '</b><li class="nav-item"><a class="nav-link" href="/post/show/' +
+                                                    id + '">' +
+                                                    '<img src="/uploads/' +
+                                                    value[0] +
+                                                    '" style="width: 50px; height: 50px"/>' +
+                                                    '</a> </li></<b>');
+                                            } else {
+                                                entitySelector.append(
+                                                    '<li class="errorLi">' +
+                                                    value + '</li>');
+                                            }
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     {% block javascripts %}{% endblock %}
 </body>
 

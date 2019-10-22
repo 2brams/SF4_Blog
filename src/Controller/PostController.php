@@ -7,6 +7,7 @@ use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -92,7 +93,7 @@ class PostController extends AbstractController
                 $filename = md5(uniqid()) . '.' . $file->guessExtension();
                 $file->move($this->getParameter('uploads_dir'), $filename);
                 $post->setImage($filename);
-                if ($lastImage!=='') {
+                if ($lastImage !== '') {
                     unlink($this->getParameter('uploads_dir') . $lastImage);
                 }
             } else {
@@ -122,5 +123,27 @@ class PostController extends AbstractController
             unlink($this->getParameter('uploads_dir') . $image);
         }
         return $this->redirectToRoute('post.list');
+    }
+    /**
+     * @Route("/post/search", name = "post.search")
+     */
+    public function search(Request $request)
+    {
+
+        $requestString = $request->get('data');
+        $posts =  $this->postRepository->findEntitiesByString($requestString);
+        if (!$posts) {
+            $result['posts']['error'] = "Post Not found :( ";
+        } else {
+            $result['posts'] = $this->getRealEntities($posts);
+        }
+        return new Response(json_encode($result));
+    }
+    public function getRealEntities($posts)
+    {
+        foreach ($posts as $post) {
+            $realEntities[$post->getId()] = [$post->getImage(), $post->getTitle()];
+        }
+        return $realEntities;
     }
 }
