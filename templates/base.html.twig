@@ -1,12 +1,182 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- mobile responsive meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>
+        {% block title %}
+        Parsa | Portfolio
+        {% endblock %}
+    </title>
+    <!-- ** Plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{asset('plugins/bootstrap/bootstrap.min.css')}}">
+    <!-- slick slider -->
+    <link rel="stylesheet" href="{{asset('plugins/slick/slick.css')}}">
+    <!-- themefy-icon -->
+    <link rel="stylesheet" href="{{asset('plugins/themify-icons/themify-icons.css')}}">
+
+    <!-- Main Stylesheet -->
+    <link href="{{asset('css/style.css')}}" rel="stylesheet">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> {% block stylesheets %}{% endblock %}
+</head>
+
+
+<body>
+
+    <!-- preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- /preloader -->
+
+    <!-- dividers -->
+    <!-- <div class="dividers">
+        <div class="divider"></div>
+        <div class="divider"></div>
+        <div class="divider"></div>
+        <div class="divider"></div>
+    </div> -->
+
+    <header class="navigation">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="{{path('post.list')}}"><img class="img-fluid" src="{{asset('images/logo.png')}}" alt="parsa"></a>
+            <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navogation"
+                aria-controls="navogation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse text-center" id="navogation">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-dark" href="about.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-dark" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-dark" href="blog.html">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-dark" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <form class="form-inline position-relative ml-lg-4">
+                    <input class="form-control px-0 w-100" type="search" placeholder="Search">
+                    <button class="search-icon" type="submit">
+                        <i class="ti-search text-dark"></i>
+                    </button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <!-- blog post -->
+    {% block body %}{% endblock %}
+    <!-- /blog post -->
+
+    <!-- instagram -->
+    <!-- <section>
+        <div class="container-fluid px-0">
+            <div class="row no-gutters instagram-slider" id="instafeed" data-userid="4044026246"
+                data-accesstoken="4044026246.1677ed0.8896752506ed4402a0519d23b8f50a17"></div>
+        </div>
+    </section> -->
+    <!-- /instagram -->
+
+    <footer>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <a href="{{path('post.list')}}"><img src="{{asset('images/logo.png')}}" alt="persa" class="img-fluid"></a>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <ul class="list-unstyled">
+                            <li class="font-secondary text-dark">Sydney</li>
+                            <li class="font-secondary text-dark">6 rip carl Avenue CA 90733</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <ul class="list-unstyled">
+                            <li class="font-secondary text-dark">Tel: +90 000 333 22</li>
+                            <li class="font-secondary text-dark">Mail: exmaple@ymail.com</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <span class="font-secondary text-dark mr-3">Follow</span>
+                        <ul class="list-inline d-inline-block">
+                            <li class="list-inline-item">
+                                <a href="#" class="text-dark">
+                                    <i class="ti-facebook"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="text-dark">
+                                    <i class="ti-twitter-alt"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="text-dark">
+                                    <i class="ti-linkedin"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="text-dark">
+                                    <i class="ti-github"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <p>Copyright ©<script>
+                    var CurrentYear = new Date().getFullYear()
+                    document.write(CurrentYear)
+                </script>
+                a theme by themefisher.com</p>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="{{asset('plugins/jQuery/jquery.min.js')}} "></script>
+    <!-- Bootstrap JS -->
+    <script src="{{asset('plugins/bootstrap/bootstrap.min.js')}}"></script>
+    <!-- slick slider -->
+    <script src="{{asset('plugins/slick/slick.min.js')}}"></script>
+    <!-- masonry -->
+    <script src="{{asset('plugins/masonry/masonry.js')}}"></script>
+    <!-- instafeed -->
+    <script src="{{asset('plugins/instafeed/instafeed.min.js')}}"></script>
+    <!-- smooth scroll -->
+    <script src="{{asset('plugins/smooth-scroll/smooth-scroll.js')}}"></script>
+    <!-- headroom -->
+    <script src="{{asset('plugins/headroom/headroom.js')}}"></script>
+    <!-- reading time -->
+    <script src="{{asset('plugins/reading-time/readingTime.min.js')}}"></script>
+
+    <!-- Main Script -->
+    <script src="{{asset('js/script.js')}}"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+
 </html>

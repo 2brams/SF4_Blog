@@ -56,10 +56,13 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $file =  $form->get('image')->getData();
-            $filename = md5(uniqid()) . '.' . $file->guessExtension();
-            $file->move($this->getParameter('uploads_dir'), $filename);
-            $post->setImage($filename);
-            // $post->setCreator($this->getUser());
+            if (!is_null($file)) {
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+                $file->move($this->getParameter('uploads_dir'), $filename);
+                $post->setImage($filename);
+            } else {
+                $post->setImage('');
+            }
 
             $this->entityManager->persist($post);
             $this->entityManager->flush();
@@ -89,7 +92,9 @@ class PostController extends AbstractController
                 $filename = md5(uniqid()) . '.' . $file->guessExtension();
                 $file->move($this->getParameter('uploads_dir'), $filename);
                 $post->setImage($filename);
-                unlink($this->getParameter('uploads_dir') . $lastImage);
+                if ($lastImage!=='') {
+                    unlink($this->getParameter('uploads_dir') . $lastImage);
+                }
             } else {
                 $post->setImage($lastImage);
             }
