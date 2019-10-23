@@ -1,11 +1,127 @@
+{% extends 'baseAdmin.html.twig' %}
 
-{{ form_start(form) }}
+{% block title %}
+Post
+{% endblock %}
 
-{{ form_widget(form.title,{'attr':{'type':'text','class':'form-control','placeholder':'Title...'}}) }}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('plugins/admin/select2/dist/css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/admin/summernote/dist/summernote-bs4.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/admin/bootstrap-tagsinput/dist/bootstrap-tagsinput.css')}}">
+<!-- <link rel="stylesheet" href="{{asset('plugins/admin/mohithg-switchery/dist/switchery.min.css')}}"> -->
+{% endblock %}
 
-{{ form_widget(form.description,{'attr':{'type':'textarea','class':'form-control','placeholder':'Description...'}}) }}
+{% block body %}
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="page-header">
+      <div class="row align-items-end">
+        <div class="col-lg-8">
+          <div class="page-header-title">
+            <i class="ik ik-edit bg-blue"></i>
+            <div class="d-inline">
+              <h5>{{action}}</h5>
+              <span>Post</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <nav class="breadcrumb-container" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="../index.html"><i class="ik ik-home"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Post</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{action}}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
 
-{{ form_widget(form.image,{'attr':{'type':'text','class':'form-control','placeholder':'photo...'}}) }}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <!-- <div class="card-header">
+            <h3>Select 2</h3>
+          </div> -->
+          <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="input">Title</label>
+                  {{ form_widget(form.title,{'attr':{'type':'text','class':'form-control'}}) }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Image</label>
+                  <div class="custom-file">
+                    {{ form_widget(form.image,{'attr':{'type':'file','class':'custom-file-input'}})}}
+                    <label class="custom-file-label " for="post_image"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6"></div>
+              <div class="col-md-6">
+                {% if post is defined and post.image is not empty %}
+                <img src="{{asset('uploads/' ~ post.image)}}" class="img-thumbnail" id="profile-img-tag" width="200px" />
+                {% else %}
+                <img src="" id="profile-img-tag" class="img-thumbnail" width="200px" />
+                {% endif %}
+              </div>
+            </div>
 
-{{ form_widget(form.Submit,{'attr':{'type':'text','class':'btn btn-common','placeholder':'Submit...'}}) }}
-{{ form_end(form) }}
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="input">Description</label>
+                  {{ form_widget(form.description,{'attr':{'type':'textarea','class':'form-control html-editor','row':'10'}})}}
+                </div>
+              </div>
+            </div>
+            {{ form_widget(form.Submit,{'attr':{'type':'text','class':'btn btn-primary float-right'},'label':action}) }}
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{{asset('plugins/admin/select2/dist/js/select2.min.js')}}"></script>
+<script src="{{asset('plugins/admin/summernote/dist/summernote-bs4.min.js')}}"></script>
+<script src="{{asset('plugins/admin/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js')}}"></script>
+<!-- <script src="{{asset('plugins/admin/mohithg-switchery/dist/switchery.min.js')}}"></script> -->
+<script src="{{asset('plugins/admin/form-advanced.js')}}"></script>
+
+<script>
+  // Add the following code if you want the name of the file appear on select
+  $(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#profile-img-tag').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  $("#post_image").change(function () {
+    readURL(this);
+  });
+</script>
+
+{% endblock %}

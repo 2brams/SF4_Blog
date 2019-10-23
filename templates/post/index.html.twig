@@ -1,171 +1,100 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseAdmin.html.twig' %}
 
-{% block title %}Hello PostController!
+{% block title %}
+Post
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('plugins/admin/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}">
+
 {% endblock %}
 
 {% block body %}
-
-<!-- hero area -->
-<section class="hero-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 align-self-end">
-        <h1 class="mb-0">Welcome</h1>
-        <h2 class="mb-100 title-border-lg">to
-          <i>Jhon Abraham Blog</i>
-        </h2>
-        <p class="mb-80 mr-5">
-          I’m a Freelance Interactive Art Director based in
-          France. Focusing across branding and identity, digital
-          and print.
-        </p>
-        <span class="font-secondary text-dark mr-3 mr-sm-5">Follow</span>
-        <ul class="list-inline d-inline-block mb-5">
-          <li class="list-inline-item mx-3">
-            <a href="#" class="text-dark">
-              <i class="ti-facebook"></i>
-            </a>
-          </li>
-          <li class="list-inline-item mx-3">
-            <a href="#" class="text-dark">
-              <i class="ti-twitter-alt"></i>
-            </a>
-          </li>
-          <li class="list-inline-item mx-3">
-            <a href="#" class="text-dark">
-              <i class="ti-linkedin"></i>
-            </a>
-          </li>
-          <li class="list-inline-item mx-3">
-            <a href="#" class="text-dark">
-              <i class="ti-github"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-6 text-right">
-        <img class="img-fluid" src="images/banner-img.png" alt="banner-image">
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /hero area -->
-
-
-<section class="section">
-  <div class="container">
-    <div class="row">
-      {% for post in posts  %}
-      <div class="col-12 mb-100">
-        <article data-file="articles/b.html" data-target="article" class="article-full-width
-        {% if loop.index%2==0 %} article-right {% endif %} ">
-          <div class="post-image">
-            <img class="img-fluid" src="{{asset('uploads/'~ post.image)}}" alt="post-thumb">
-          </div>
-          <div class="post-content">
-            <ul class="list-inline d-flex justify-content-between border-bottom post-meta pb-2 mb-4">
-              <li class="list-inline-item">
-                <i class="ti-calendar mr-2"></i>
-                {{post.createdAt|date("d M , Y")}}
-              </li>
-              <li class="list-inline-item">
-                <i class="ti-alarm-clock mr-2"></i>
-                <span class="eta">8 min</span>
-                read
-              </li>
-            </ul>
-            <h4 class="mb-2">
-              <a href="{{path("post.show",{id:post.id})}}" class="text-dark">
-                {{post.title}}
-              </a>
-            </h4>
-            <li class="list-inline-item mb-4">
-              <span class="font-weight-bold">Last update:</span>
-              {{post.updatedAt|date(" d M , Y H:i")}}
-            </li>
-            <p class="mb-0 post-summary">
-              {{post.description}}
-            </p>
-            <a class="btn btn-transparent mb-4" href="{{path("post.show",{id:post.id})}}">Continue...</a>
-            <div class="author">
-              <span class="d-block">Post by</span>
-              <p>Jhon Abraham</p>
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="page-header">
+      <div class="row align-items-end">
+        <div class="col-lg-8">
+          <div class="page-header-title">
+            <i class="ik ik-inbox bg-blue"></i>
+            <div class="d-inline">
+              <h5>List</h5>
+              <span>Post</span>
             </div>
           </div>
-        </article>
+        </div>
+        <div class="col-lg-4">
+          <nav class="breadcrumb-container" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="../index.html"><i class="ik ik-home"></i></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#">Post</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">List</li>
+            </ol>
+          </nav>
+        </div>
       </div>
-      {% endfor %}
     </div>
     <div class="row">
-      <div class="col-12">
-        <nav>
-          <ul class="pagination justify-content-center align-items-center">
-            <li class="page-item">
-              <span class="page-link">&laquo; Previous</span>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">01</a>
-            </li>
-            <li class="page-item active">
-              <span class="page-link">02</span>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">03</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">04</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">05</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">06</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next &raquo;</a>
-            </li>
-          </ul>
-        </nav>
+      <div class="col-md-12">
+        <div class="card">
+          <!-- <div class="card-header">
+            <h3>Data Table</h3>
+          </div> -->
+          <div class="card-body">
+            <a class="btn btn-primary float-right" href="{{path('post.add')}}" role="button">Create new post</a>
+            <table id="data_table" class="table">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th class="nosort">Image</th>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th class="nosort">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for post in posts %}
+                <tr>
+                  <td> {{loop.index}} </td>
+                  <td><img src="{{asset('uploads/'~post.image)}}" class="table-user-thumb" alt=""></td>
+                  <td> {{post.title}} </td>
+                  <td>Publier</td>
+                  <td>
+
+                    <div class="table-actions">
+                      <!-- <a href="{{path('post.show',{id:post.id})}}"><i class="ik ik-eye text-secondary"></i></a> -->
+                      <a href="{{path('post.edit',{id:post.id})}}"><i class="ik ik-edit-2 text-info"></i></a>
+                      <form method="post" action="{{path('post.delete',{id:post.id})}}" style="display:inline-block"
+                        onsubmit="return confirm('Etes vous vraiment sur?')">
+                        <input name="_method" type="hidden" value="DELETE">
+                        <input type="hidden" name="_token" value="{{csrf_token('delete'~ post.id)}}">
+                        <button class="btn btn-link nounderline">
+                          <i class="ik ik-trash-2 text-danger"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Images</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for post in posts %}
-    <tr>
-      <td scope="row">
-        {{post.title}}
-      </td>
-      <td>
-        {{post.description}}
-      </td>
-      <td>
-        {{post.image}}
-      </td>
-      <td>
-        <a class="btn btn-primary" href="{{path("post.edit",{id:post.id})}}">Edit</a>
-        <a class="btn btn-primary" href="{{path("post.show",{id:post.id})}}">Show</a>
-        <form method="post" action="{{path('post.delete',{id:post.id})}}" style="display:inline-block"
-          onsubmit="return confirm('Etes vous vraiment sur?')">
-          <input name="_method" type="hidden" value="DELETE">
-          <input type="hidden" name="_token" value="{{csrf_token('delete'~ post.id)}}">
-          <button class="btn  btn-danger btn-circle">
-            delete
-          </button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
 
-  </tbody>
-</table>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{{asset('plugins/admin/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/admin/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/admin/datatables.js')}}"></script>
+
 {% endblock %}

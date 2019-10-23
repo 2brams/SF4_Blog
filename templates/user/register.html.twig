@@ -1,0 +1,68 @@
+{% extends 'baseSecurity.html.twig' %}
+
+{% block title %}Log up!{% endblock %}
+
+{% block body %}
+<div class="auth-wrapper">
+  <div class="container-fluid h-100">
+    <div class="row flex-row h-100 bg-white">
+      <div class="col-xl-8 col-lg-6 col-md-5 p-0 d-md-block d-lg-block d-sm-none d-none">
+        <div class="lavalite-bg" style="background-image: url('img/auth/register-bg.jpg')">
+          <div class="lavalite-overlay"></div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-6 col-md-7 my-auto p-0">
+        <div class="authentication-form mx-auto">
+          <div class="logo-centered">
+            <a href="{{path('home')}}"><img src="img/brand.svg" alt=""></a>
+          </div>
+          <h3>Sign In to ThemeKit</h3>
+          {% if app.user %}
+          <p> You are logged in as {{ app.user.username }}</p>
+          {% else %}
+          <p>Join us today! It takes only few steps</p>
+          {% endif %}
+
+          <form method="post">
+            <div class="form-group">
+              <input type="email" value="" name="email" class="form-control" placeholder="Email" required autofocus>
+              <i class="ik ik-user"></i>
+            </div>
+            <div class="form-group">
+              <input type="password" name="password" class="form-control" placeholder="Password" required>
+              <i class="ik ik-lock"></i>
+            </div>
+            <div class="form-group">
+              <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm Password"
+                required="">
+              <i class="ik ik-eye-off"></i>
+            </div>
+            <div class="row">
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+
+              <div class="col-12 text-left">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="item_checkbox" name="item_checkbox"
+                    value="option1">
+                  <span class="custom-control-label">&nbsp;I Accept <a href="#">Terms and Conditions</a></span>
+                </label>
+              </div>
+            </div>
+            <div class="sign-btn text-center">
+              {% if app.user %}
+              <a class="btn btn-theme" href="{{ path('app_logout') }}">Logout</a>
+              {% else %}
+              <button class="btn btn-theme" type="submit">Create Account</button>
+              {% endif %}
+            </div>
+          </form>
+          <div class="register">
+            <p>Already have an account? <a href="{{ path('app_login') }}">Sign In</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

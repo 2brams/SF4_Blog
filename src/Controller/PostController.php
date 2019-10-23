@@ -23,7 +23,7 @@ class PostController extends AbstractController
         $this->entityManager = $entityManager;
     }
     /**
-     * @Route("/", name="post.list")
+     * @Route("/profile/post", name="post.list")
      */
     public function index()
     {
@@ -45,7 +45,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("profile/post/add", name="post.add")
+     * @Route("/profile/post/add", name="post.add")
      */
     public function add(Request $request)
     {
@@ -73,11 +73,12 @@ class PostController extends AbstractController
 
         return $this->render('post/edit.html.twig', [
             "form" => $form->createView(),
+            "action" => "Add",
         ]);
     }
 
     /**
-     * @Route("profile/post/edit/{id}", name="post.edit")
+     * @Route("/profile/post/edit/{id}", name="post.edit")
      */
     public function edit(Request $request, Post $post)
     {
@@ -108,11 +109,13 @@ class PostController extends AbstractController
 
         return $this->render('post/edit.html.twig', [
             "form" => $form->createView(),
+            "post" => $post,
+            "action" => "Edit",
         ]);
     }
 
     /**
-     * @Route("profile/post/delete/{id}", name = "post.delete", methods="DELETE")
+     * @Route("/profile/post/delete/{id}", name = "post.delete", methods="DELETE")
      */
     public function delete(Post $post, Request $request)
     {

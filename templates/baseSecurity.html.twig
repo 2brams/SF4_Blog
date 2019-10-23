@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    {% block title %}Security{% endblock %}
+  </title>
+
+  {% include "admin/_css.html.twig" %}
+
+  {% block stylesheets %}{% endblock %}
+</head>
+
+
+<body>
+
+  {% block body %}{% endblock %}
+
+
+
+  {% include "admin/_js.html.twig" %}
+</body>
+
+</html>
