@@ -68,7 +68,8 @@ Post
               <div class="col-md-6"></div>
               <div class="col-md-6">
                 {% if post is defined and post.image is not empty %}
-                <img src="{{asset('uploads/' ~ post.image)}}" class="img-thumbnail" id="profile-img-tag" width="200px" />
+                <img src="{{post.image}}" class="img-thumbnail" id="profile-img-tag" width="200px" />
+                <!-- <img src="{{asset('uploads/' ~ post.image)}}" class="img-thumbnail" id="profile-img-tag" width="200px" /> -->
                 {% else %}
                 <img src="" id="profile-img-tag" class="img-thumbnail" width="200px" />
                 {% endif %}

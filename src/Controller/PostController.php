@@ -39,8 +39,10 @@ class PostController extends AbstractController
      */
     public function show(Post $post)
     {
+        $lastPost = $this->postRepository->findBy([], ['createdAt' => 'DESC'], 3);
         return $this->render('post/show.html.twig', [
-            "post" => $post
+            "post" => $post,
+            "lastPost" => $lastPost,
         ]);
     }
 

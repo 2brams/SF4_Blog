@@ -60,7 +60,8 @@ Post
                 {% for post in posts %}
                 <tr>
                   <td> {{loop.index}} </td>
-                  <td><img src="{{asset('uploads/'~post.image)}}" class="table-user-thumb" alt=""></td>
+                  <td><img src="{{post.image}}" class="table-user-thumb" alt=""></td>
+                  <!-- <td><img src="{{asset('uploads/'~post.image)}}" class="table-user-thumb" alt=""></td> -->
                   <td> {{post.title}} </td>
                   <td>Publier</td>
                   <td>

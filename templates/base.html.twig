@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>
         {% block title %}
-        Parsa | Portfolio
+        Parsa |
         {% endblock %}
     </title>
     <!-- ** Plugins Needed for the Project ** -->
@@ -54,7 +54,7 @@
 
     <header class="navigation">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{path('post.list')}}"><img class="img-fluid"
+            <a class="navbar-brand" href="{{path('home')}}"><img class="img-fluid"
                     src="{{asset('images/logo.png')}}" alt="parsa"></a>
             <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navogation"
                 aria-controls="navogation" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,12 +118,12 @@
     <!-- /blog post -->
 
     <!-- instagram -->
-    <!-- <section>
+    <section>
         <div class="container-fluid px-0">
             <div class="row no-gutters instagram-slider" id="instafeed" data-userid="4044026246"
                 data-accesstoken="4044026246.1677ed0.8896752506ed4402a0519d23b8f50a17"></div>
         </div>
-    </section> -->
+    </section>
     <!-- /instagram -->
 
     <footer>
@@ -238,7 +238,7 @@
                                                         1] +
                                                     '</b><li class="nav-item"><a class="nav-link" href="/post/show/' +
                                                     id + '">' +
-                                                    '<img src="/uploads/' +
+                                                    '<img src="' +
                                                     value[0] +
                                                     '" style="width: 50px; height: 50px"/>' +
                                                     '</a> </li></<b>');

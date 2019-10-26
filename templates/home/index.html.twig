@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home!
+{% block title %}
+{{parent()}}Accueil
 {% endblock %}
 
 {% block body %}
@@ -60,7 +61,8 @@
                 <article data-file="articles/b.html" data-target="article" class="article-full-width
         {% if loop.index%2==0 %} article-right {% endif %} ">
                     <div class="post-image">
-                        <img class="img-fluid" src="{{asset('uploads/'~ post.image)}}" alt="post-thumb">
+                        <img class="img-fluid" src="{{post.image}}" alt="post-thumb">
+                        <!-- <img class="img-fluid" src="{{asset('uploads/'~ post.image)}}" alt="post-thumb"> -->
                     </div>
                     <div class="post-content">
                         <ul class="list-inline d-flex justify-content-between border-bottom post-meta pb-2 mb-4">
@@ -83,8 +85,8 @@
                             <span class="font-weight-bold">Last update:</span>
                             {{post.updatedAt|date(" d M , Y H:i")}}
                         </li>
-                        <p class="mb-0 post-summary">
-                            {{post.description|raw}}
+                        <p class="mb-0 post-summary text-justify">
+                            {{post.description|striptags|truncate(300, true)}}
                         </p>
                         <a class="btn btn-transparent mb-4" href="{{path("post.show",{id:post.id})}}">Continue...</a>
                         <div class="author">
@@ -98,34 +100,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <nav>
-                    <ul class="pagination justify-content-center align-items-center">
-                        <li class="page-item">
-                            <span class="page-link">&laquo; Previous</span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">01</a>
-                        </li>
-                        <li class="page-item active">
-                            <span class="page-link">02</span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">03</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">04</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">05</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">06</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next &raquo;</a>
-                        </li>
-                    </ul>
-                </nav>
+                {{ knp_pagination_render(posts) }}
             </div>
         </div>
     </div>
