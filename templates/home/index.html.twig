@@ -61,8 +61,8 @@
                 <article data-file="articles/b.html" data-target="article" class="article-full-width
         {% if loop.index%2==0 %} article-right {% endif %} ">
                     <div class="post-image">
-                        <img class="img-fluid" src="{{post.image}}" alt="post-thumb">
-                        <!-- <img class="img-fluid" src="{{asset('uploads/'~ post.image)}}" alt="post-thumb"> -->
+                        <img class="img-fluid" src="{{post.image.name}}" alt="post-thumb">
+                        <!-- <img class="img-fluid" src="{{asset('uploads/'~ post.image.name)}}" alt="post-thumb"> -->
                     </div>
                     <div class="post-content">
                         <ul class="list-inline d-flex justify-content-between border-bottom post-meta pb-2 mb-4">
@@ -91,7 +91,7 @@
                         <a class="btn btn-transparent mb-4" href="{{path("post.show",{id:post.id})}}">Continue...</a>
                         <div class="author">
                             <span class="d-block">Post by</span>
-                            <p>Jhon Abraham</p>
+                            <p>{{post.user.firstName ~' '~  post.user.name }}</p>
                         </div>
                     </div>
                 </article>

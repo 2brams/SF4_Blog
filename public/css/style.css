@@ -805,7 +805,7 @@ blockquote {
 }
 
 .content * {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .widget {
@@ -846,3 +846,31 @@ blockquote {
 }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+
+
+.comment-wrapper .panel-body {
+    /* max-height:850px; */
+    overflow:auto;
+}
+
+.comment-wrapper .media-list .media img {
+    width:64px;
+    height:64px;
+    border:2px solid #e5e7e8;
+}
+
+
+.comment-wrapper .media-list .media {
+    border-bottom:1px dashed #efefef;
+    margin-bottom: 20px;
+}
+
+button{
+    border:none !important;
+    outline:none !important;
+
+}
+.nounderline {
+  text-decoration: none !important
+}

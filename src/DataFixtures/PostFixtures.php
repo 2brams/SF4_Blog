@@ -12,16 +12,16 @@ class PostFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
 
-        $faker = Faker\Factory::create('fr_FR');
+        // $faker = Faker\Factory::create('fr_FR');
 
 
-        for ($i = 0; $i < 50; $i++) {
-            $post = new Post();
-            $post->setTitle($faker->catchPhrase);
-            $post->setDescription($faker->text(2000));
-            $post->setImage($faker->imageUrl(640, 480, 'technics'));
-            $manager->persist($post);
-        }
-        $manager->flush();
+        // for ($i = 0; $i < 50; $i++) {
+        //     $post = new Post();
+        //     $post->setTitle($faker->catchPhrase);
+        //     $post->setDescription($faker->text(2000));
+        //     $post->setImage($faker->imageUrl(640, 480, 'technics'));
+        //     $manager->persist($post);
+        // }
+        // $manager->flush();
     }
 }

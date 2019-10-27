@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
+use App\Entity\File;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +18,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PostController extends AbstractController
 {
     private $postRepository;
+    private $userRepository;
     private $entityManager;
 
 
-    public function __construct(PostRepository $postRepository, EntityManagerInterface $entityManager)
+    public function __construct(PostRepository $postRepository, UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->postRepository = $postRepository;
+        $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
     }
     /**
@@ -37,12 +43,28 @@ class PostController extends AbstractController
     /**
      * @Route("/post/show/{id}", name="post.show")
      */
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
         $lastPost = $this->postRepository->findBy([], ['createdAt' => 'DESC'], 3);
+
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $comment->setPost($this->postRepository->find($request->get('post')));
+            $comment->setUser($this->userRepository->find($request->get('user')));
+
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush();
+
+            return $this->redirect($request->getUri());
+        }
         return $this->render('post/show.html.twig', [
             "post" => $post,
             "lastPost" => $lastPost,
+            "form" => $form->createView(),
         ]);
     }
 
@@ -53,6 +75,7 @@ class PostController extends AbstractController
     {
 
         $post = new Post();
+        $image = new File();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -62,9 +85,8 @@ class PostController extends AbstractController
             if (!is_null($file)) {
                 $filename = md5(uniqid()) . '.' . $file->guessExtension();
                 $file->move($this->getParameter('uploads_dir'), $filename);
-                $post->setImage($filename);
-            } else {
-                $post->setImage('');
+                $image->setName($filename);
+                $post->setImage($image);
             }
 
             $this->entityManager->persist($post);
@@ -84,7 +106,7 @@ class PostController extends AbstractController
      */
     public function edit(Request $request, Post $post)
     {
-
+        $image = new File();
         $lastImage = $post->getImage();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -95,7 +117,8 @@ class PostController extends AbstractController
             if (!is_null($file)) {
                 $filename = md5(uniqid()) . '.' . $file->guessExtension();
                 $file->move($this->getParameter('uploads_dir'), $filename);
-                $post->setImage($filename);
+                $image->setName($filename);
+                $post->setImage($image);
                 if ($lastImage !== '') {
                     unlink($this->getParameter('uploads_dir') . $lastImage);
                 }
@@ -119,7 +142,7 @@ class PostController extends AbstractController
     /**
      * @Route("/profile/post/delete/{id}", name = "post.delete", methods="DELETE")
      */
-    public function delete(Post $post, Request $request)
+    public function deletePost(Post $post, Request $request)
     {
         $image = $post->getImage();
         if ($this->isCsrfTokenValid('delete' . $post->getId(), $request->get('_token'))) {
@@ -129,6 +152,19 @@ class PostController extends AbstractController
         }
         return $this->redirectToRoute('post.list');
     }
+
+    /**
+     * @Route("/profile/comment/delete/{id}", name = "comment.delete", methods="DELETE")
+     */
+    public function deleteComment(Comment $comment, Request $request)
+    {
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->get('_token'))) {
+            $this->entityManager->remove($comment);
+            $this->entityManager->flush();
+        }
+        return $this->redirectToRoute('post.show', ['id' => $request->get('post')]);
+    }
+
     /**
      * @Route("/search", name = "post.search")
      */

@@ -23,20 +23,94 @@
     <div class="row">
       <div class="col-lg-8">
         <ul class="list-inline d-flex justify-content-between py-3">
-          <li class="list-inline-item"><i class="ti-user mr-2"></i>Post by Jhon Abraham</li>
+          <li class="list-inline-item"><i class="ti-user mr-2"></i>Post by
+            {{post.user.firstName ~' '~  post.user.name }}</li>
           <li class="list-inline-item"><i class="ti-calendar mr-2"></i>{{post.createdAt|date("d M , Y")}}</li>
           <li class="list-inline-item">
             <span class="font-weight-bold">Last update:</span>
             {{post.updatedAt|date(" d M , Y H:i")}}
           </li>
         </ul>
-        <img src="{{post.image}}" alt="post-thumb" class="w-100 img-fluid mb-4">
-        <!-- <img src="{{asset('uploads/'~ post.image)}}" alt="post-thumb" class="w-100 img-fluid mb-4"> -->
+        <img src="{{post.image.name}}" alt="post-thumb" class="w-100 img-fluid mb-4">
+        <!-- <img src="{{asset('uploads/'~ post.image.name)}}" alt="post-thumb" class="w-100 img-fluid mb-4"> -->
         <div class="content text-justify">
           <p>{{post.description|raw}}</p>
+          <div class="mt-5"></div>
+          <div class="row mt-5">
 
-          <blockquote>.......................... </blockquote>
+            <div class="comment-wrapper col-md-12">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h5>Comments</h5>
+                </div>
+                <hr>
+                <div class="panel-body">
+                  {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                  {{ form_start(form)}}
+                  {{ form_widget(form.content,{'attr':{'type':'textarea','class':'form-control','placeholder':'write a comment...','row':'3'}})}}
 
+                  <input type="text" name="user" hidden value="{{app.user.id}}">
+                  <input type="text" name="post" hidden value="{{post.id}}">
+
+                  {{ form_widget(form.Submit,{'attr':{'class':'btn btn-info float-right'},'label':'Post'}) }}
+                  {{ form_end(form) }}
+                  {% else %}
+                  Only members can write comments, please
+                  <a href="{{path('app_login')}}" class="text-primary">
+                    login
+                  </a> or
+                  <a href="{{path('user.register')}}" class="text-primary">
+                    register
+                  </a>.
+                  {% endif %}
+
+                  <div class="clearfix"></div>
+                  <div class="mb-5"></div>
+                  {% for comment in post.comments %}
+                  <ul class="media-list">
+                    <li class="media">
+                      <a href="#" class="mr-2">
+                        <img src="{{comment.user.photo.name}}" alt="" class="rounded-circle">
+                        <!-- <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="rounded-circle"> -->
+                      </a>
+                      <div class="media-body">
+                        <span class="text-muted float-right">
+                          <small class="text-muted">{{comment.createdAt|ago}}</small>
+                        </span>
+                        <strong class="text-success">@{{comment.user.name}} </strong>
+                        <p>
+                          {{comment.content}}
+                        </p>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <span class="float-right">
+                          {% if app.user.id==comment.user.id %}
+                          <form method="post" action="{{path('comment.delete',{id:comment.id})}}"
+                            style="display:inline-block" onsubmit="return confirm('Etes vous vraiment sur?')">
+                            <input name="_method" type="hidden" value="DELETE">
+                            <input name="post" type="hidden" value="{{post.id}}">
+                            <input type="hidden" name="_token" value="{{csrf_token('delete'~ comment.id)}}">
+                            <button class="btn btn-link nounderline">
+                              <i class="ti-trash text-danger"></i>
+                            </button>
+                          </form>
+                          {% else %}
+                          <a href="#" class="text-info">
+                            <i class="ti-thumb-up">10</i>
+                          </a>
+                          <a href="#" class="text-primary">
+                            <i class="ti-thumb-down">8</i>
+                          </a>
+                          {% endif %}
+                        </span>
+                        {% endif %}
+                      </div>
+                    </li>
+                  </ul>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-lg-4">
@@ -51,14 +125,16 @@
           {% for post  in lastPost %}
           <div class="media mb-4">
             <div class="post-thumb-sm mr-3">
-              <img class="img-fluid" src="{{post.image}}" alt="post-thumb">
+              <img class="img-fluid" src="{{post.image.name}}" alt="post-thumb">
             </div>
             <div class="media-body">
               <ul class="list-inline d-flex justify-content-between mb-2">
-                <li class="list-inline-item">Post By Jhon</li>
+                <li class="list-inline-item">Post By {{post.user.name }}</li>
                 <li class="list-inline-item">{{post.createdAt|date("d M , Y H:i")}}</li>
               </ul>
-              <h6><a class="text-dark" href="blog-single.html">{{post.description|striptags|truncate(50, true)}}</a></h6>
+              <h6><a class="text-dark"
+                  href="{{path("post.show",{id:post.id})}}">{{post.description|striptags|truncate(50, true)}}</a>
+              </h6>
             </div>
           </div>
           {% endfor %}
